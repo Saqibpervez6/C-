@@ -1,0 +1,72 @@
+package user;
+
+class Node {
+    String course;
+    Node prev, next;
+
+    Node(String course) {
+        this.course = course;
+        this.prev = this.next = null;
+    }
+}
+
+class DoublyLinkedList {
+    Node head, tail;
+
+    void insert(String course) {
+        Node newNode = new Node(course);
+        if (head == null) {
+            head = tail = newNode;
+        } else {
+            tail.next = newNode;
+            newNode.prev = tail;
+            tail = newNode;
+        }
+    }
+
+    void printPrerequisites(String course) {
+        Node temp = head;
+
+        // Search for the given course
+        while (temp != null && !temp.course.equals(course)) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Course not found!");
+            return;
+        }
+
+        // Move backward to print prerequisites
+        temp = temp.prev;
+        if (temp == null) {
+            System.out.println("No prerequisites found for " + course);
+            return;
+        }
+
+        System.out.println("Prerequisites for " + course + ":");
+        while (temp != null) {
+            System.out.print(temp.course);
+            if (temp.prev != null) System.out.print(" -> ");
+            temp = temp.prev;
+        }
+        System.out.println();
+    }
+}
+
+public class prerequisst {
+    public static void main(String[] args) {
+        DoublyLinkedList dll = new DoublyLinkedList();
+
+        dll.insert("PF");
+        dll.insert("OOP");
+        dll.insert("DST");
+        dll.insert("DBMS");
+        dll.insert("OOAD");
+        dll.insert("AI");
+        dll.insert("DP");
+
+        String userInput = "AI";
+        dll.printPrerequisites(userInput);
+    }
+}
