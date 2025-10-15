@@ -1,0 +1,73 @@
+package user;
+
+import java.util.Scanner;
+
+public class CricketBowlingStatsFormatted {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of bowlers: ");
+        int numBowlers = sc.nextInt();
+
+        // Jagged array: each row for a bowler, storing ball-by-ball data
+        int[][] bowlingData = new int[numBowlers][];
+        int maxBalls = 0; // to align table #1 columns
+
+        for (int i = 0; i < numBowlers; i++) {
+            System.out.print("Enter number of balls bowled by Bowler " + (i + 1) + ": ");
+            int balls = sc.nextInt();
+            if (balls > maxBalls) maxBalls = balls;
+
+            bowlingData[i] = new int[balls];
+            System.out.println("Enter ball-by-ball data for Bowler " + (i + 1) + ":");
+            System.out.println("Runs: 0,1,2,3,4,6 | Wide: -1 | No-ball: -2 | Wicket: -3");
+            for (int j = 0; j < balls; j++) {
+                System.out.print("Ball " + (j + 1) + ": ");
+                bowlingData[i][j] = sc.nextInt();
+            }
+        }
+
+        // ===== Table #1 =====
+        System.out.println("\n=== Table #1: Ball-by-Ball Bowling Details ===");
+        System.out.printf("%-10s", "Bowler");
+        for (int b = 1; b <= maxBalls; b++) {
+            System.out.printf("%-8s", "Ball " + b);
+        }
+        System.out.println();
+
+        for (int i = 0; i < bowlingData.length; i++) {
+            System.out.printf("%-10d", (i + 1));
+            for (int j = 0; j < maxBalls; j++) {
+                if (j < bowlingData[i].length)
+                    System.out.printf("%-8d", bowlingData[i][j]);
+                else
+                    System.out.printf("%-8s", "-");
+            }
+            System.out.println();
+        }
+
+        // ===== Table #2 =====
+        System.out.println("\n=== Table #2: Bowler Performance Summary ===");
+        System.out.printf("%-10s %-10s %-6s %-8s %-6s %-7s%n",
+                "Bowler", "Overs", "Runs", "Wickets", "Extras", "Economy");
+
+        for (int i = 0; i < bowlingData.length; i++) {
+            int runs = 0, wickets = 0, extras = 0, legalBalls = 0;
+            for (int ball : bowlingData[i]) {
+                if (ball >= 0) runs += ball;
+                else if (ball == -3) wickets++;
+                else if (ball == -1 || ball == -2) extras++;
+                if (ball != -1 && ball != -2) legalBalls++;
+            }
+
+            double overs = legalBalls / 6 + (legalBalls % 6) / 6.0;
+            double economy = (overs > 0) ? (double) runs / overs : 0;
+
+            System.out.printf("%-10d %-10.1f %-6d %-8d %-6d %-7.2f%n",
+                    (i + 1), overs, runs, wickets, extras, economy);
+        }
+
+        sc.close();
+    }
+}
+
