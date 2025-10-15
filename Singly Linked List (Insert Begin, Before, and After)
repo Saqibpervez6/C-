@@ -1,0 +1,96 @@
+package user;
+
+class Node {
+    int data;
+    Node next;
+
+    Node(int data) {
+        this.data = data;
+        this.next = null;
+    }
+}
+
+class Linked{
+    Node head;
+
+    // Insert at the beginning
+    public void insertBegin(int data) {
+        Node newNode = new Node(data);
+        newNode.next = head;
+        head = newNode;
+    }
+
+    // Insert a node before a given key
+    public void insertBefore(int data, int key) {
+        if (head == null) return;
+
+        // If key is at head
+        if (head.data == key) {
+            insertBegin(data);
+            return;
+        }
+
+        Node temp = head;
+        while (temp.next != null && temp.next.data != key) {
+            temp = temp.next;
+        }
+
+        if (temp.next == null) {
+            System.out.println("Key " + key + " not found!");
+            return;
+        }
+
+        Node newNode = new Node(data);
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    // Insert a node after a given key
+    public void insertAfter(int key, int data) {
+        Node temp = head;
+        while (temp != null && temp.data != key) {
+            temp = temp.next;
+        }
+
+        if (temp == null) {
+            System.out.println("Key " + key + " not found!");
+            return;
+        }
+
+        Node newNode = new Node(data);
+        newNode.next = temp.next;
+        temp.next = newNode;
+    }
+
+    // Display list
+    public void display(String msg) {
+        System.out.println(msg + ":");
+        Node temp = head;
+        while (temp != null) {
+            System.out.print(temp.data + " -> ");
+            temp = temp.next;
+        }
+        System.out.println("null");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Linked list = new Linked();
+
+        // Insert at beginning
+        list.insertBegin(10);
+        list.insertBegin(20);
+        list.insertBegin(30);
+
+        list.display("Initial List");
+
+        // Insert before key
+        list.insertBefore(15, 10);
+        list.display("After inserting 15 before 10");
+
+        // Insert after key
+        list.insertAfter(20, 25);
+        list.display("After inserting 25 after 20");
+    }
+}
